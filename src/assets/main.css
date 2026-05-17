@@ -1,0 +1,84 @@
+:root {
+  --tg-bg: #0f1115;
+  --tg-surface: #171a21;
+  --tg-surface-2: #1f242d;
+  --tg-text: #e6e8ec;
+  --tg-muted: #9aa3b2;
+  --tg-accent: #ff5a5f;
+  --tg-accent-2: #6ee7b7;
+}
+
+body {
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+a { color: var(--tg-accent-2); text-decoration: none; }
+a:hover { color: var(--tg-accent); }
+
+.card-tg {
+  background: var(--tg-surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  color: var(--tg-text);
+  overflow: hidden;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.card-tg:hover { transform: translateY(-2px); border-color: var(--tg-accent); }
+
+.navbar-tg {
+  background: var(--tg-surface);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.btn-accent {
+  background: var(--tg-accent);
+  border-color: var(--tg-accent);
+  color: #fff;
+}
+.btn-accent:hover { background: #e04a4f; border-color: #e04a4f; color: #fff; }
+
+.form-control, .form-select {
+  background: var(--tg-surface-2);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--tg-text);
+}
+.form-control:focus, .form-select:focus {
+  background: var(--tg-surface-2);
+  color: var(--tg-text);
+  border-color: var(--tg-accent);
+  box-shadow: 0 0 0 .2rem rgba(255,90,95,0.15);
+}
+
+.badge-genre {
+  background: var(--tg-surface-2);
+  color: var(--tg-muted);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-weight: 500;
+}
+
+.text-muted-tg { color: var(--tg-muted) !important; }
+
+.cover-thumb {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  width: 100%;
+  background: var(--tg-surface-2);
+}
+
+.pagination .page-link {
+  background: var(--tg-surface);
+  border-color: rgba(255,255,255,0.08);
+  color: var(--tg-text);
+}
+.pagination .page-item.active .page-link {
+  background: var(--tg-accent);
+  border-color: var(--tg-accent);
+  color: #fff;
+}
+.pagination .page-item.disabled .page-link {
+  background: var(--tg-surface);
+  color: var(--tg-muted);
+}
