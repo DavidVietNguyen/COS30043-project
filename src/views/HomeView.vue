@@ -5,8 +5,14 @@ import GameCard from '../components/GameCard.vue'
 
 const featured = ref([])
 const latest = ref([])
+const reviews = ref([])
+const votes = ref([])
 const loading = ref(true)
 const error = ref('')
+
+const totalLikes = computed(() => votes.value.length)
+const totalReviews = computed(() => reviews.value.length)
+const topFeatured = computed(() => featured.value.slice(0, 4))
 
 onMounted(async () => {
   try {
