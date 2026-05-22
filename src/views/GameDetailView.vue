@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, onMounted, watch } from 'vue'
+import { useRoute, usersApi   } from 'vue-router'
 import { gamesApi, reviewsApi } from '../services/api'
+import ReviewVoteButton from '../components/ReviewVoteButton.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
 const route = useRoute()
@@ -11,16 +12,43 @@ const reviews = ref([])
 const loading = ref(true)
 const error = ref('')
 
+const reviewPage = ref(1) //Reviews are now paginated, showing 4 reviews per page. 
+const reviewPageSize = 4
+
+const userMap = computed(() => { 
+  return Object.fromEntries(users.value.map((user) => [Number(user.id), user]))
+})
+
+const totalReviewPages = computed(() => Math.max(1, Math.ceil(reviews.value.length / reviewPageSize)))
+
+const pagedReviews = computed(() => {
+  const start = (reviewPage.value - 1) * reviewPageSize
+  return reviews.value.slice(start, start + reviewPageSize)
+})
+
+function reviewerName(userId) { //Instead of only showing user ID, it displays the username. 
+  return userMap.value[Number(userId)]?.username || `User #${userId}`
+}
+
+function setReviewPage(page) {
+  if (page < 1 || page > totalReviewPages.value) return
+  reviewPage.value = page
+}
+
 async function load(id) {
   loading.value = true
   error.value = ''
+  reviewPage.value = 1
+
   try {
-    const [{ data: g }, { data: r }] = await Promise.all([
+    const [{ data: gameData }, { data: reviewData }, { data: userData }] = await Promise.all([
       gamesApi.get(id),
-      reviewsApi.list({ gameId: id, _sort: 'createdAt', _order: 'desc' })
+      reviewsApi.list({ gameId: Number(id), _sort: 'createdAt', _order: 'desc' }),
+      usersApi.list()
     ])
-    game.value = g
-    reviews.value = r
+    game.value = gameData
+    reviews.value = reviewData
+    users.value = userData
   } catch (e) {
     error.value = 'Game not found.'
   } finally {
@@ -56,6 +84,9 @@ watch(() => route.params.id, (id) => { if (id) load(id) })
           <strong class="text-muted-tg small d-block mb-1">Platforms</strong>
           <span v-for="p in game.platforms" :key="p" class="badge badge-genre me-1">{{ p }}</span>
         </div>
+        <router-link to="/games" class="btn btn-outline-light btn-sm mt-2">
+          <i class="bi bi-arrow-left me-1"></i>Back to games
+        </router-link>
       </div>
     </div>
 
@@ -76,6 +107,24 @@ watch(() => route.params.id, (id) => { if (id) load(id) })
         <p class="mb-1 small">{{ r.body }}</p>
         <small class="text-muted-tg">{{ new Date(r.createdAt).toLocaleDateString() }}</small>
       </div>
+      <!-- Each review now has its own like/upvote button. -->
+      <div v-for="review in pagedReviews" :key="review.id" class="card-tg p-3 p-md-4 mb-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+          <div class="flex-grow-1">
+            <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+              <strong class="fs-5">{{ review.title }}</strong>
+              <span class="text-warning" :aria-label="`${review.rating} star rating`">
+                <i v-for="n in Number(review.rating)" :key="n" class="bi bi-star-fill"></i>
+              </span>
+            </div>
+            <p class="mb-2">{{ review.body }}</p>
+            <small class="text-muted-tg">
+              Posted by {{ reviewerName(review.userId) }} · {{ new Date(review.createdAt).toLocaleDateString() }}
+            </small>
+          </div>
+          <div class="review-action-panel text-md-end">
+            <ReviewVoteButton :review-id="review.id" />
+          </div>
     </section>
   </template>
 </template>
