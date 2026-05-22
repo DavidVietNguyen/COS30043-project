@@ -48,4 +48,14 @@ export const votesApi = {
   remove: (id) => api.delete(`/votes/${id}`)
 }
 
+export const adminApi = {
+  stats: () => api.get('/admin/stats'),
+  listGames: () => api.get('/admin/games'),
+  createGame: (data) => api.post('/admin/games', data),
+  updateGame: (id, data) => api.patch(`/admin/games/${id}`, data),
+  removeGame: (id) => api.delete(`/admin/games/${id}`),
+  listReviews: (params) => api.get('/admin/reviews', { params }),
+  removeReview: (id) => api.delete(`/admin/reviews/${id}`)
+}
+
 export default api
