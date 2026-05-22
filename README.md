@@ -76,7 +76,7 @@ project/
 
 ## Team allocation
 
-| Person | Owns | Files / Routes |
+| Member | Owns | Files / Routes |
 |---|---|---|
 | **1** | Auth & Profiles | `LoginView`, `RegisterView`, `ProfileView`, `stores/auth.js`, route guards in `router/index.js` |
 | **2** ✅ | Games browse & detail | `HomeView`, `GamesView`, `GameDetailView`, `components/GameCard.vue` |
