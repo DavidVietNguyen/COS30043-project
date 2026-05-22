@@ -82,3 +82,84 @@ a:hover { color: var(--tg-accent); }
   background: var(--tg-surface);
   color: var(--tg-muted);
 }
+
+.hero-tg {
+  background:
+    radial-gradient(circle at top right, rgba(255, 90, 95, 0.22), transparent 35%),
+    linear-gradient(135deg, var(--tg-surface), #111827);
+}
+
+.hero-panel, .mini-stat {
+  background: rgba(15, 17, 21, 0.72);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+}
+
+.detail-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--tg-surface-2);
+}
+
+.review-action-panel {
+  min-width: 130px;
+}
+
+.admin-tabs .nav-link {
+  color: var(--tg-text);
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-right: .5rem;
+}
+
+.admin-tabs .nav-link.active {
+  background: var(--tg-accent);
+  border-color: var(--tg-accent);
+}
+
+.admin-search {
+  max-width: 320px;
+}
+
+.admin-form-card {
+  top: 90px;
+}
+
+.admin-table {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: rgba(255,255,255,0.08);
+}
+
+.form-check-input {
+  background-color: var(--tg-surface-2);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.form-check-input:checked {
+  background-color: var(--tg-accent);
+  border-color: var(--tg-accent);
+}
+
+.about-icon {
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--tg-accent);
+  opacity: .55;
+}
+
+.not-found-card {
+  max-width: 720px;
+}
+
+.not-found-icon {
+  font-size: clamp(3rem, 8vw, 6rem);
+}
+
+@media (max-width: 576px) {
+  .admin-search {
+    max-width: none;
+  }
+
+  .table-responsive {
+    font-size: .9rem;
+  }
+}
