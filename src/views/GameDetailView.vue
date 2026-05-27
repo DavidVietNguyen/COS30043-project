@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue'
-import { useRoute, usersApi   } from 'vue-router'
-import { gamesApi, reviewsApi } from '../services/api'
+import { useRoute } from 'vue-router'
+import { gamesApi, reviewsApi, usersApi } from '../services/api'
 import ReviewVoteButton from '../components/ReviewVoteButton.vue'
 
 const props = defineProps({ id: { type: [String, Number], required: true } })
@@ -9,6 +9,7 @@ const route = useRoute()
 
 const game = ref(null)
 const reviews = ref([])
+const users = ref([])
 const loading = ref(true)
 const error = ref('')
 
@@ -96,22 +97,12 @@ watch(() => route.params.id, (id) => { if (id) load(id) })
         <strong>Person 3 TODO:</strong> render review list with star ratings, pagination, and a "write a review" form for authenticated users.
       </div>
 
-      <!-- Provisional review list so Person 3 can see what the data looks like -->
-      <div v-for="r in reviews" :key="r.id" class="card-tg p-3 mb-2">
-        <div class="d-flex justify-content-between">
-          <strong>{{ r.title }}</strong>
-          <span class="text-warning">
-            <i v-for="n in r.rating" :key="n" class="bi bi-star-fill"></i>
-          </span>
-        </div>
-        <p class="mb-1 small">{{ r.body }}</p>
-        <small class="text-muted-tg">{{ new Date(r.createdAt).toLocaleDateString() }}</small>
-      </div>
-      <!-- Each review now has its own like/upvote button. -->
+      <!-- Empty state -->
+      <div v-if="reviews.length === 0" class="text-muted-tg">No reviews yet.</div>
+
+      <!-- Paginated review list; each review has its own like/upvote button. -->
       <div v-for="review in pagedReviews" :key="review.id" class="card-tg p-3 p-md-4 mb-3">
         <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
-        <div>
-      <div>
           <div class="flex-grow-1">
             <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
               <strong class="fs-5">{{ review.title }}</strong>
@@ -127,6 +118,23 @@ watch(() => route.params.id, (id) => { if (id) load(id) })
           <div class="review-action-panel text-md-end">
             <ReviewVoteButton :review-id="review.id" />
           </div>
+        </div>
+      </div>
+
+      <!-- Review pagination -->
+      <nav v-if="totalReviewPages > 1" class="mt-3">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" :class="{ disabled: reviewPage === 1 }">
+            <button class="page-link" @click="setReviewPage(reviewPage - 1)" aria-label="Previous">‹</button>
+          </li>
+          <li v-for="p in totalReviewPages" :key="p" class="page-item" :class="{ active: p === reviewPage }">
+            <button class="page-link" @click="setReviewPage(p)">{{ p }}</button>
+          </li>
+          <li class="page-item" :class="{ disabled: reviewPage === totalReviewPages }">
+            <button class="page-link" @click="setReviewPage(reviewPage + 1)" aria-label="Next">›</button>
+          </li>
+        </ul>
+      </nav>
     </section>
   </template>
 </template>
