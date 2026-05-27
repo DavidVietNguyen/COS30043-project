@@ -110,6 +110,8 @@ watch(() => route.params.id, (id) => { if (id) load(id) })
       <!-- Each review now has its own like/upvote button. -->
       <div v-for="review in pagedReviews" :key="review.id" class="card-tg p-3 p-md-4 mb-3">
         <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+        <div>
+      <div>
           <div class="flex-grow-1">
             <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
               <strong class="fs-5">{{ review.title }}</strong>
